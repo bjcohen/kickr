@@ -1,0 +1,9 @@
+boards:
+- name: nice_nano
+  vendor: vendor
+  socs:
+    - name: nrf52840
+- name: nice_nano_v2
+  vendor: vendor
+  socs:
+    - name: nrf52840
