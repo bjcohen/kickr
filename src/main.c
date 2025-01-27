@@ -25,14 +25,18 @@ int main(void) {
     return 0;
   }
 
+  if (!device_is_ready(p1)) {
+    return 0;
+  }
+
   if (gpio_pin_configure(p0, 15, GPIO_OUTPUT_ACTIVE) < 0) {
     return 0;
   }
 
-  int p0_pins[] = {2, 6, 8, 9, 10, 11, 17, 20, 22, 24, 31};
+  int p0_pins[] = {2, 6, 8, 9, 10, 11, 17, 20, 22, 24, 29, 31};
   int p1_pins[] = {0, 1, 2, 4, 6, 7, 11, 13, 15};
 
-  for (int i = 0; i < 11; i++) {
+  for (int i = 0; i < 12; i++) {
     if (gpio_pin_configure(p0, p0_pins[i], GPIO_INPUT) < 0) {
       return 0;
     }
@@ -57,7 +61,7 @@ int main(void) {
       return 0;
     }
     printk("p0: ");
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < 12; i++) {
       int v = gpio_pin_get(p0, p0_pins[i]);
       printk("%d", v);
     }
