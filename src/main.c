@@ -12,6 +12,13 @@ BUILD_ASSERT(DT_NODE_HAS_COMPAT(DT_CHOSEN(zephyr_console), zephyr_cdc_acm_uart),
 #define P1_NODE DT_NODELABEL(gpio1)
 static const struct device *p0 = DEVICE_DT_GET(P0_NODE);
 static const struct device *p1 = DEVICE_DT_GET(P1_NODE);
+static struct gpio_callback cb_data;
+
+void callback(const struct device *dev, struct gpio_callback *cb,
+              uint32_t pins) {
+  int v = gpio_pin_get(p0, 6);
+  printk("Callback at %d %d\n", pins, v);
+}
 
 int main(void) {
   const struct device *const dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
@@ -47,6 +54,13 @@ int main(void) {
       return 0;
     }
   }
+
+  if (gpio_pin_interrupt_configure(p0, 6, GPIO_INT_EDGE_BOTH) < 0) {
+    return 0;
+  }
+
+  gpio_init_callback(&cb_data, callback, BIT(6));
+  gpio_add_callback(p0, &cb_data);
 
   /* Poll if the DTR flag was set */
   while (!dtr) {
